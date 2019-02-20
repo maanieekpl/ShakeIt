@@ -20,7 +20,7 @@ namespace ShakeIt.Controllers
         //GET: Drinks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.DrinkTable.ToListAsync());
+            return View(await _context.Drink.ToListAsync());
         }
 
         //GET: Drinks/5
@@ -31,9 +31,16 @@ namespace ShakeIt.Controllers
                 return NotFound();
             }
 
-            var drinkTable = await _context.DrinkTable.SingleOrDefaultAsync(m => m.DrinkId == id);
-            var drinkIngridients = _context.DrinkIngridientsTable.Select(m => m.DrinkId == id).ToList();
-            Drink drink = new Drink(id, drinkTable, drinkIngridients);
+            var drink = await _context.Drink.SingleOrDefaultAsync((System.Linq.Expressions.Expression<Func<Drink, bool>>)(m => m.DrinkId == id));
+            //var drinkIngridients = await _context.DrinkIngridientsTable.Select(m => new DrinkIngridientsTable
+            //{
+            //    DrinkId = m.DrinkId,
+            //    IngridientId = m.IngridientId,
+            //    Capacity = m.Capacity
+            //}).ToListAsync();
+            //var drink = new Drink(drinkTable.DrinkId, drinkTable, drinkIngridients);
+
+
             if (drink == null)
             {
                 return NotFound();
@@ -71,7 +78,7 @@ namespace ShakeIt.Controllers
                 return NotFound();
             }
 
-            var drink = await _context.Drink.SingleOrDefaultAsync(m => m.DrinkId == id);
+            var drink = await _context.Drink.SingleOrDefaultAsync((System.Linq.Expressions.Expression<Func<Drink, bool>>)(m => m.DrinkId == id));
             if (drink == null)
             {
                 return NotFound();
@@ -122,7 +129,7 @@ namespace ShakeIt.Controllers
                 return NotFound();
             }
 
-            var drink = await _context.Drink.SingleOrDefaultAsync(m => m.DrinkId == id);
+            var drink = await _context.Drink.SingleOrDefaultAsync((System.Linq.Expressions.Expression<Func<Drink, bool>>)(m => m.DrinkId == id));
             if (drink == null)
             {
                 return NotFound();
@@ -135,15 +142,15 @@ namespace ShakeIt.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var myUser = await _context.Drink.SingleOrDefaultAsync(m => m.DrinkId == id);
-            _context.Drink.Remove(myUser);
+            var myUser = await _context.Drink.SingleOrDefaultAsync((System.Linq.Expressions.Expression<Func<Drink, bool>>)(m => m.DrinkId == id));
+            _context.Drink.Remove((Drink)myUser);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool DrinkExists(int drinkId)
         {
-            return _context.Drink.Any(e => e.DrinkId == drinkId);
+            return _context.Drink.Any((System.Linq.Expressions.Expression<Func<Drink, bool>>)(e => e.DrinkId == drinkId));
         }
 
 

@@ -17,10 +17,10 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.drinkTable.DrinkName)
+                    @Html.DisplayNameFor(model => model.DrinkName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.drinkTable.DrinkType)
+                    @Html.DisplayNameFor(model => model.DrinkType)
                 </th>
                 <th></th>
             </tr>
@@ -30,10 +30,10 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.drinkTable.DrinkName)
+                        @Html.DisplayFor(modelItem => item.DrinkName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.drinkTable.DrinkType)
+                        @Html.DisplayFor(modelItem => item.DrinkType)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.DrinkId">Edit</a> |

@@ -13,8 +13,8 @@ namespace ShakeIt.Models
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
 
         public DbSet<Drink> Drink { get; set; }
-        public DbSet<DrinkTable> DrinkTable { get; set; }
-        public DbSet<DrinkIngridientsTable> DrinkIngridientsTable { get; set; }
+        //public DbSet<Drink> DrinkTable { get; set; }
+        //public DbSet<DrinkIngridientsTable> DrinkIngridientsTable { get; set; }
 
 
 }
