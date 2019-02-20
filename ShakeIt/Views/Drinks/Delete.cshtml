@@ -1,0 +1,41 @@
+﻿@model ShakeIt.Models.Drink
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>MyUser</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.DrinkName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DrinkName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DrinkType)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DrinkType)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="DrinkId" />
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </form>
+    </div>
+</body>
+</html>
+
+
