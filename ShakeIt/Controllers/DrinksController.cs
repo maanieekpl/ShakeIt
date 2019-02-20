@@ -20,7 +20,7 @@ namespace ShakeIt.Controllers
         //GET: Drinks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Drink.ToListAsync());
+            return View(await _context.DrinkTable.ToListAsync());
         }
 
         //GET: Drinks/5
@@ -31,7 +31,9 @@ namespace ShakeIt.Controllers
                 return NotFound();
             }
 
-            var drink = await _context.Drink.SingleOrDefaultAsync(m => m.DrinkId == id);
+            var drinkTable = await _context.DrinkTable.SingleOrDefaultAsync(m => m.DrinkId == id);
+            var drinkIngridients = _context.DrinkIngridientsTable.Select(m => m.DrinkId == id).ToList();
+            Drink drink = new Drink(id, drinkTable, drinkIngridients);
             if (drink == null)
             {
                 return NotFound();
