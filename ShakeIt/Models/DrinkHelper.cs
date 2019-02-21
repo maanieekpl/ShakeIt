@@ -8,17 +8,12 @@ namespace ShakeIt.Models
 {
     public class DrinkHelper
     {
+        public int DHId { get; set; }
+        public Drink DHDrink { get; set; }
+        public List<DrinkIngridientsHelper> DHDIHelper { get; set; } = new List<DrinkIngridientsHelper>();
+        //public List<DrinkIngridients> DHDrinkIngrid { get; set; }
 
-        public DrinkHelper(int DrinkId, Drink drinkTable, List<DrinkIngridientsTable> drinkIngridients)
-        {
-            this.DrinkId = DrinkId;
-            this.drinkTable = drinkTable;
-            this.drinkIngridientsTable = drinkIngridients;
-        }
 
-        public int DrinkId;
-        public Drink drinkTable;
-        public List<DrinkIngridientsTable> drinkIngridientsTable = new List<DrinkIngridientsTable>();
 
     }
 

@@ -1,4 +1,4 @@
-﻿@model ShakeIt.Models.Drink
+﻿@model ShakeIt.Models.DrinkHelper
 @{
     ViewData["Title"] = "Drink";
 }
@@ -15,22 +15,53 @@
         <hr />
         <dl class="dl-horizontal">
             <dt>
-                @Html.DisplayNameFor(model => model.DrinkName)
+                @Html.DisplayNameFor(model => model.DHDrink.DrinkName)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.DrinkName)
+                @Html.DisplayFor(model => model.DHDrink.DrinkName)
             </dd>
             <dt>
-                @Html.DisplayNameFor(model => model.DrinkType)
+                @Html.DisplayNameFor(model => model.DHDrink.DrinkType)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.DrinkType)
+                @Html.DisplayFor(model => model.DHDrink.DrinkType)
             </dd>
         </dl>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <p>Składniki</p>
+                    </th>
+                    <th>
+                        <p>Ilość</p>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.DHDIHelper)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IngridName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Capacity)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.DrinkId">Edit</a> |
+                            <a asp-action="Drink" asp-route-id="@item.DrinkId">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.DrinkId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 
     <div>
-        <a asp-action="Edit" asp-route-id="@Model.DrinkId">Edit</a> |
+        <a asp-action="Edit" asp-route-id="@Model.DHId">Edit</a> |
         <a asp-action="Index">Back to List</a>
     </div>
 </body>

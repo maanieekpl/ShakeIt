@@ -13,9 +13,15 @@ namespace ShakeIt.Models
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
 
         public DbSet<Drink> Drink { get; set; }
-        //public DbSet<Drink> DrinkTable { get; set; }
-        //public DbSet<DrinkIngridientsTable> DrinkIngridientsTable { get; set; }
+        public DbSet<Ingridient> Ingridient { get; set; }
+        public DbSet<DrinkIngridients> DrinkIngridients { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<DrinkIngridients>().HasKey(di => new { di.DrinkId, di.IngridientId });
+            
+        }
 
 }
 
