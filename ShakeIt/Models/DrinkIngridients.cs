@@ -15,6 +15,7 @@ namespace ShakeIt.Models
         [ForeignKey("Ingridients")]
         public int IngridientId { get; set; }
         public string Capacity { get; set; }
+
     }
 
 

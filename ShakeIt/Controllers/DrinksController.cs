@@ -16,14 +16,17 @@ namespace ShakeIt.Controllers
         {
             _context = context;
         }
-
+        //################################################################################################
         //GET: Drinks
+        //################################################################################################
         public async Task<IActionResult> Index()
         {
             return View(await _context.Drink.ToListAsync());
         }
 
+        //################################################################################################
         //GET: Drinks/5
+        //################################################################################################
         public async Task<IActionResult> Drink (int? id)
         {
             if (id == null)
@@ -78,13 +81,17 @@ namespace ShakeIt.Controllers
             return View(drinkHelper);
         }
 
+        //################################################################################################
         //GET: Drinks/Create
+        //################################################################################################
         public IActionResult Create()
         {
             return View();
         }
 
+        //################################################################################################
         //POST: Test/Create
+        //################################################################################################
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
@@ -108,9 +115,11 @@ namespace ShakeIt.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DHId, DHDrink, DHDIHelper")] DrinkHelper drinkHelper)
         {
+            drinkHelper.DHDrink.DrinkId = await _context.Drink.MaxAsync(m => m.DrinkId) + 1;
+
             Drink drink = new Drink();
             drink = drinkHelper.DHDrink;
-
+            
             List<DrinkIngridientsHelper> dih = new List<DrinkIngridientsHelper>();
             dih = drinkHelper.DHDIHelper;
             List<DrinkIngridients> drinkIngridients = new List<DrinkIngridients>();
@@ -118,7 +127,7 @@ namespace ShakeIt.Controllers
             {
                 DrinkIngridients di = new DrinkIngridients
                 {
-                    DrinkId = dih[i].DrinkId,
+                    DrinkId = drinkHelper.DHDrink.DrinkId,
                     //IngridientId = dih[i].IngridientId,
                     IngridientId = _context.Ingridient.SingleOrDefault(m => m.IngridName == dih[i].IngridName).IngridId,
                     Capacity = dih[i].Capacity
@@ -129,6 +138,7 @@ namespace ShakeIt.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(drink);
+                await _context.SaveChangesAsync();
                 _context.AddRange(drinkIngridients);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -136,8 +146,9 @@ namespace ShakeIt.Controllers
             return View(drinkHelper);
         }
 
-
+        //################################################################################################
         //GET: Drinks/Edit/5
+        //################################################################################################
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -153,7 +164,9 @@ namespace ShakeIt.Controllers
             return View(drink);
         }
 
+        //################################################################################################
         //POST: Drinks/Edit/5
+        //################################################################################################
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -188,7 +201,9 @@ namespace ShakeIt.Controllers
             return View(drink);
         }
 
+        //################################################################################################
         //GET: Drinks/Delete/5
+        //################################################################################################
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -204,7 +219,9 @@ namespace ShakeIt.Controllers
             return View(drink);
         }
 
+        //################################################################################################
         //POST: Drink/Delete/5
+        //################################################################################################
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
