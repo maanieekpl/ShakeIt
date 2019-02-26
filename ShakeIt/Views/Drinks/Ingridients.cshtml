@@ -1,0 +1,70 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model ShakeIt.Models.DrinkHelper
+
+
+
+<div class="table">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <p>Składniki</p>
+                </th>
+                <th>
+                    <p>Ilość</p>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.DHDIHelper)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IngridName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Capacity)
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.IngridName">Delete</a>
+                    </td>
+                </tr>
+
+            }
+            @*@{
+                Model.DHDIHelper.Add(new DrinkIngridientsHelper()
+                {
+                    DrinkId = Model.DHId,
+                    IngridName = "",
+                    Capacity = ""
+                });
+            }*@
+            <tr>
+                <form asp-action="Ingridients">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="drinkIngridientsHelper.DrinkId" />
+                    <td>
+                        <input asp-for="drinkIngridientsHelper.IngridName" class="form-control" />
+                        <span asp-validation-for="drinkIngridientsHelper.IngridName" class="text-danger"></span>
+                    </td>
+                    <td>
+                        <input asp-for="drinkIngridientsHelper.Capacity" class="form-control" />
+                        <span asp-validation-for="drinkIngridientsHelper.Capacity" class="text-danger"></span>
+                    </td>
+
+                    <td>
+                        <input type="submit" value="Add" class="btn btn-default"/>
+                    </td>
+                </form>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

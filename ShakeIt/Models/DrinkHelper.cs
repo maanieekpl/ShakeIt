@@ -11,6 +11,7 @@ namespace ShakeIt.Models
         public int DHId { get; set; }
         public Drink DHDrink { get; set; }
         public List<DrinkIngridientsHelper> DHDIHelper { get; set; } = new List<DrinkIngridientsHelper>();
+        public DrinkIngridientsHelper drinkIngridientsHelper { get; set; }
         //public List<DrinkIngridients> DHDrinkIngrid { get; set; }
 
 

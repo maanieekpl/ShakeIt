@@ -64,6 +64,7 @@ namespace ShakeIt.Controllers
                 drinkHelper.DHDIHelper.Add(dih);
             }
 
+
             //drinkHelper.DHDrinkIngrid = drinkIngridients;
             //var drinkIngridients = await _context.DrinkIngridientsTable.Select(m => new DrinkIngridientsTable
             //{
@@ -94,57 +95,56 @@ namespace ShakeIt.Controllers
         //################################################################################################
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("DrinkId, DrinkName, DrinkType")] Drink drink,
-        //    [Bind("DrinkId, IgridientId, Capacity")] DrinkIngridients drinkIngridients, 
-        //    [Bind("IngridId, IngridType, IngridName")] Ingridient ingridient)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(drink);
-        //        _context.Add(drinkIngridients);
-        //        _context.Add(ingridient);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(drink);
-        //}
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DHId, DHDrink, DHDIHelper")] DrinkHelper drinkHelper)
+        public async Task<IActionResult> Create([Bind("DrinkId, DrinkName, DrinkType")] Drink drink)
         {
-            drinkHelper.DHDrink.DrinkId = await _context.Drink.MaxAsync(m => m.DrinkId) + 1;
-
-            Drink drink = new Drink();
-            drink = drinkHelper.DHDrink;
-            
-            List<DrinkIngridientsHelper> dih = new List<DrinkIngridientsHelper>();
-            dih = drinkHelper.DHDIHelper;
-            List<DrinkIngridients> drinkIngridients = new List<DrinkIngridients>();
-            for(int i = 0; i < dih.Count; i++)
-            {
-                DrinkIngridients di = new DrinkIngridients
-                {
-                    DrinkId = drinkHelper.DHDrink.DrinkId,
-                    //IngridientId = dih[i].IngridientId,
-                    IngridientId = _context.Ingridient.SingleOrDefault(m => m.IngridName == dih[i].IngridName).IngridId,
-                    Capacity = dih[i].Capacity
-                };
-                drinkIngridients.Add(di);
-            }
+            drink.DrinkId = await _context.Drink.MaxAsync(m => m.DrinkId) + 1;
+            drink.IngridientsCount = 0;
 
             if (ModelState.IsValid)
             {
                 _context.Add(drink);
                 await _context.SaveChangesAsync();
-                _context.AddRange(drinkIngridients);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Edit));
             }
-            return View(drinkHelper);
+            return View(drink.DrinkId);
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("DHId, DHDrink, DHDIHelper")] DrinkHelper drinkHelper)
+        //{
+        //    drinkHelper.DHDrink.DrinkId = await _context.Drink.MaxAsync(m => m.DrinkId) + 1;
+
+        //    Drink drink = new Drink();
+        //    drink = drinkHelper.DHDrink;
+
+        //    List<DrinkIngridientsHelper> dih = new List<DrinkIngridientsHelper>();
+        //    dih = drinkHelper.DHDIHelper;
+        //    List<DrinkIngridients> drinkIngridients = new List<DrinkIngridients>();
+        //    for(int i = 0; i < dih.Count; i++)
+        //    {
+        //        DrinkIngridients di = new DrinkIngridients
+        //        {
+        //            DrinkId = drinkHelper.DHDrink.DrinkId,
+        //            //IngridientId = dih[i].IngridientId,
+        //            IngridientId = _context.Ingridient.SingleOrDefault(m => m.IngridName == dih[i].IngridName).IngridId,
+        //            Capacity = dih[i].Capacity
+        //        };
+        //        drinkIngridients.Add(di);
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(drink);
+        //        await _context.SaveChangesAsync();
+        //        _context.AddRange(drinkIngridients);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(drinkHelper);
+        //}
 
         //################################################################################################
         //GET: Drinks/Edit/5
@@ -156,12 +156,53 @@ namespace ShakeIt.Controllers
                 return NotFound();
             }
 
-            var drink = await _context.Drink.SingleOrDefaultAsync((System.Linq.Expressions.Expression<Func<Drink, bool>>)(m => m.DrinkId == id));
+            var drink = await _context.Drink.SingleOrDefaultAsync(m => m.DrinkId == id);
+            var drinkIngridients = await _context.DrinkIngridients.Where(m => m.DrinkId == id).ToListAsync();
+
+            var temp = await (from di in _context.DrinkIngridients
+                              join i in _context.Ingridient on di.IngridientId equals i.IngridId
+                              where di.DrinkId == id
+                              select new
+                              {
+                                  DrinkId = di.DrinkId,
+                                  IngridId = di.IngridientId,
+                                  IngridName = i.IngridName,
+                                  Capacity = di.Capacity
+                              }).ToListAsync();
+
+
+            DrinkHelper drinkHelper = new DrinkHelper();
+            drinkHelper.DHId = drink.DrinkId;
+            drinkHelper.DHDrink = drink;
+            for (int i = 0; i < temp.Count; i++)
+            {
+                DrinkIngridientsHelper dih = new DrinkIngridientsHelper
+                {
+                    DrinkId = temp[i].DrinkId,
+                    //IngridientId = temp[i].IngridId,
+                    IngridName = temp[i].IngridName,
+                    Capacity = temp[i].Capacity
+                };
+                drinkHelper.DHDIHelper.Add(dih);
+            }
+
             if (drink == null)
             {
                 return NotFound();
             }
-            return View(drink);
+            return View(drinkHelper);
+
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var drink = await _context.Drink.SingleOrDefaultAsync((System.Linq.Expressions.Expression<Func<Drink, bool>>)(m => m.DrinkId == id));
+            //if (drink == null)
+            //{
+            //    return NotFound();
+            //}
+            //return View(drink);
         }
 
         //################################################################################################
@@ -235,6 +276,51 @@ namespace ShakeIt.Controllers
         private bool DrinkExists(int drinkId)
         {
             return _context.Drink.Any((System.Linq.Expressions.Expression<Func<Drink, bool>>)(e => e.DrinkId == drinkId));
+        }
+
+        //################################################################################################
+        //GET: Drinks/AddIngridient
+        //################################################################################################
+        public IActionResult Ingridients(int? id)
+        {
+            return View();
+        }
+
+        //################################################################################################
+        //POST: Drnik/AddIngridient
+        //################################################################################################
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Ingridients([Bind("DrinkId, IngridName, Capacity")] DrinkIngridientsHelper dih)
+        {
+            
+            Drink drink = await _context.Drink.SingleOrDefaultAsync(m => m.DrinkId == dih.DrinkId);
+            DrinkIngridients di = new DrinkIngridients();
+
+            int test1 = dih.DrinkId;
+            String test2 = dih.IngridName;
+            String test3 = dih.Capacity;
+            int test = 0;
+
+                  
+                di.IngridientId = _context.Ingridient.SingleOrDefault(m => m.IngridName == dih.IngridName).IngridId;
+                di.DrinkId = dih.DrinkId;
+                di.Capacity = dih.Capacity;
+
+            drink.IngridientsCount++;
+
+            //drink.DrinkId = await _context.Drink.MaxAsync(m => m.DrinkId) + 1;
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(di);
+                _context.Update(drink);
+                await _context.SaveChangesAsync();
+                //return RedirectToAction(nameof(Edit));
+            }
+            return View(dih);
         }
 
 

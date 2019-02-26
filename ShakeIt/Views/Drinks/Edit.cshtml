@@ -1,4 +1,4 @@
-﻿@model ShakeIt.Models.Drink
+﻿@model ShakeIt.Models.DrinkHelper
 @{
     ViewData["Title"] = "Edit";
 }
@@ -16,22 +16,25 @@
         <div class="col-md-4">
             <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="DrinkId" />
+                <input type="hidden" asp-for="DHDrink.DrinkId" />
                 <div class="form-group">
-                    <label asp-for="DrinkName" class="control-label"></label>
-                    <input asp-for="DrinkName" class="form-control" />
-                    <span asp-validation-for="DrinkName" class="text-danger"></span>
+                    <label asp-for="DHDrink.DrinkName" class="control-label"></label>
+                    <input asp-for="DHDrink.DrinkName" class="form-control" />
+                    <span asp-validation-for="DHDrink.DrinkName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="DrinkType" class="control-label"></label>
-                    <input asp-for="DrinkType" class="form-control" />
-                    <span asp-validation-for="DrinkType" class="text-danger"></span>
+                    <label asp-for="DHDrink.DrinkType" class="control-label"></label>
+                    <input asp-for="DHDrink.DrinkType" class="form-control" />
+                    <span asp-validation-for="DHDrink.DrinkType" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-default" />
                 </div>
             </form>
         </div>
+    </div>
+    <div>
+        @await Html.PartialAsync("Ingridients.cshtml")
     </div>
     <div>
         <a asp-action="Index">Back to List</a>

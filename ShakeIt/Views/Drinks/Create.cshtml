@@ -1,4 +1,4 @@
-﻿@model ShakeIt.Models.DrinkHelper
+﻿@model ShakeIt.Models.Drink
 @{
     ViewData["Title"] = "Create";
 }
@@ -17,16 +17,16 @@
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="DHDrink.DrinkName" class="control-label"></label>
-                    <input asp-for="DHDrink.DrinkName" class="form-control" />
-                    <span asp-validation-for="DHDrink.DrinkName" class="text-danger"></span>
+                    <label asp-for="DrinkName" class="control-label"></label>
+                    <input asp-for="DrinkName" class="form-control" />
+                    <span asp-validation-for="DrinkName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="DHDrink.DrinkType" class="control-label"></label>
-                    <input asp-for="DHDrink.DrinkType" class="form-control" />
-                    <span asp-validation-for="DHDrink.DrinkType" class="text-danger"></span>
+                    <label asp-for="DrinkType" class="control-label"></label>
+                    <input asp-for="DrinkType" class="form-control" />
+                    <span asp-validation-for="DrinkType" class="text-danger"></span>
                 </div>
-                <div id="ingridient">
+                @*<div id="ingridient">
                     <div class="form-group">
                         <label asp-for="DHDIHelper[0].IngridName" class="control-label"></label>
                         <input asp-for="DHDIHelper[0].IngridName" class="form-control" />
@@ -36,8 +36,7 @@
                         <label asp-for="DHDIHelper[0].Capacity" class="control-label"></label>
                         <input asp-for="DHDIHelper[0].Capacity" class="form-control" />
                         <span asp-validation-for="DHDIHelper[0].Capacity" class="text-danger"></span>
-                    </div>
-                    <button id="imgBtnAddNewLineItem">text</button>
+                    </div>*@
                     <div id="result"></div>
                 </div>
                 <div class="form-group">
